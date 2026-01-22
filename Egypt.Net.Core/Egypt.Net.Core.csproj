@@ -4,14 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
 
-  <PackageId>Egypt.Net.Core</PackageId>
-  <Title>Egypt.NET Core</Title>
-  <Description>Core domain utilities for Egyptian national data parsing.</Description>
-  <Authors>Abdulrahman Hossam</Authors>
-  <Company>Community</Company>
-  <PackageLicenseExpression>MIT</PackageLicenseExpression>
-  <RepositoryUrl>https://github.com/your-username/Egypt.Net.Core</RepositoryUrl>
-  <PackageTags>egypt;national-id;dotnet;domain</PackageTags>
+    <PackageId>Egypt.Net.Core</PackageId>
+    <Title>Egypt.NET Core</Title>
+    <Description>Core domain utilities for Egyptian national data parsing.</Description>
+    <Authors>Abdulrahman Hossam</Authors>
+    <Company>Community</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/abdulrhmanhossam/egypt-net-core</RepositoryUrl>
+    <PackageTags>egypt;national-id;dotnet;domain</PackageTags>
+  </PropertyGroup>
 </Project>

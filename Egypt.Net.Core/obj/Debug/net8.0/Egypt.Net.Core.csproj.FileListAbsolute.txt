@@ -1,0 +1,12 @@
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\bin\Debug\net8.0\Egypt.Net.Core.deps.json
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\bin\Debug\net8.0\Egypt.Net.Core.dll
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\bin\Debug\net8.0\Egypt.Net.Core.pdb
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\Egypt.Net.Core.GeneratedMSBuildEditorConfig.editorconfig
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\Egypt.Net.Core.AssemblyInfoInputs.cache
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\Egypt.Net.Core.AssemblyInfo.cs
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\Egypt.Net.Core.csproj.CoreCompileInputs.cache
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\Egypt.Net.Core.sourcelink.json
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\Egypt.Net.Core.dll
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\refint\Egypt.Net.Core.dll
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\Egypt.Net.Core.pdb
+E:\ASP.NET\Egypt.Net.Core\Egypt.Net.Core\obj\Debug\net8.0\ref\Egypt.Net.Core.dll
