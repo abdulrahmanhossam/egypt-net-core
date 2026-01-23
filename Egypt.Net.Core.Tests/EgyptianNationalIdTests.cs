@@ -73,4 +73,21 @@ public class EgyptianNationalIdTests
             new EgyptianNationalId(invalidId);
         });
     }
+
+    [Fact]
+    public void Age_ShouldBeCorrect_ForKnownBirthDate()
+    {
+        var id = new EgyptianNationalId("30001010123456"); // 1/1/2000
+
+        Assert.True(id.Age >= 24);
+    }
+
+    [Fact]
+    public void IsAdult_ShouldBeTrue_WhenAgeIs18OrMore()
+    {
+        var id = new EgyptianNationalId("30001010123456");
+
+        Assert.True(id.IsAdult);
+    }
+
 }

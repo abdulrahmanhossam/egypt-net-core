@@ -11,6 +11,8 @@ public sealed class EgyptianNationalId
     private const int SerialIndex = 9;
     private const int SerialLength = 3;
 
+    public bool IsAdult => Age >= 18;
+    public int Age => CalculateAge();
     public Governorate Governorate { get; }
     public string Value { get; }
     public DateTime BirthDate { get; }
@@ -47,6 +49,17 @@ public sealed class EgyptianNationalId
         }
 
         return true;
+    }
+
+    private int CalculateAge()
+    {
+        var today = DateTime.Today;
+        int age = today.Year - BirthDate.Year;
+
+        if (BirthDate.Date > today.AddYears(-age))
+            age--;
+
+        return age;
     }
 
     private DateTime GetBirthDate()
