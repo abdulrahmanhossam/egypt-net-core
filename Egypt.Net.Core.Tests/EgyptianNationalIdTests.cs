@@ -30,7 +30,7 @@ public class EgyptianNationalIdTests
     }
 
     [Fact]
-    public void Gender_ShouldBeFemale_WhenSerialLastDigitIsEven()
+    public void Gender_ShouldBeMale_WhenSerialLastDigitIsEven()
     {
         // Arrange
         var nationalIdValue = "30101011234568";
@@ -55,4 +55,22 @@ public class EgyptianNationalIdTests
         });
     }
 
+    [Fact]
+    public void Governorate_ShouldBeCairo_WhenCodeIs01()
+    {
+        var id = new EgyptianNationalId("30101010123456");
+
+        Assert.Equal(Governorate.Cairo, id.Governorate);
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrow_WhenGovernorateCodeIsInvalid()
+    {
+        var invalidId = "30101019999999";
+
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            new EgyptianNationalId(invalidId);
+        });
+    }
 }

@@ -11,7 +11,7 @@ public sealed class EgyptianNationalId
     private const int SerialIndex = 9;
     private const int SerialLength = 3;
 
-
+    public Governorate Governorate { get; }
     public string Value { get; }
     public DateTime BirthDate { get; }
     public int GovernorateCode { get; }
@@ -27,6 +27,7 @@ public sealed class EgyptianNationalId
 
         BirthDate = GetBirthDate();
         GovernorateCode = GetGovernorateCode();
+        Governorate = GetGovernorate();
         SerialNumber = GetSerialNumber();
         Gender = GetGender();
     }
@@ -69,6 +70,16 @@ public sealed class EgyptianNationalId
     private int GetGovernorateCode()
     {
         return int.Parse(Value.Substring(GovernorateIndex, 2));
+    }
+
+    private Governorate GetGovernorate()
+    {
+        int code = GetGovernorateCode();
+
+        if (!Enum.IsDefined(typeof(Governorate), code))
+            throw new InvalidOperationException("Invalid governorate code in national ID.");
+
+        return (Governorate)code;
     }
 
     private int GetSerialNumber()
