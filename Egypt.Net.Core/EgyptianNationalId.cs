@@ -17,6 +17,8 @@ public sealed class EgyptianNationalId
     private const int GovernorateIndex = 7;
     private const int SerialIndex = 9;
     private const int SerialLength = 4;
+    private const int GenderDigitIndex = 12;
+
 
     /// <summary>
     /// Gets the original 14-digit National ID value.
@@ -140,9 +142,9 @@ public sealed class EgyptianNationalId
 
     private Gender GetGender()
     {
-        int serialLastDigit = Value[^1] - '0';
+        int genderDigit = Value[GenderDigitIndex] - '0';
 
-        return serialLastDigit % 2 == 0
+        return genderDigit % 2 == 0
             ? Gender.Female
             : Gender.Male;
     }

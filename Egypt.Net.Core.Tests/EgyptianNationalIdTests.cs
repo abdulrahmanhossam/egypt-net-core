@@ -36,9 +36,9 @@ public class EgyptianNationalIdTests
     }
 
     [Fact]
-    public void Gender_ShouldBeMale_WhenSerialLastDigitIsOdd()
+    public void Gender_ShouldBeMale_WhenGenderDigitIsOdd()
     {
-        var nationalIdValue = "30101011234567";
+        var nationalIdValue = "30101011234577";
 
         var nationalId = new EgyptianNationalId(nationalIdValue);
 
