@@ -1,4 +1,4 @@
-# Egypt.Net.Core
+# Egypt.Net.Core 🇪🇬
 
 Core domain utilities for working with Egyptian national data in .NET.
 
@@ -31,6 +31,7 @@ This project exists to:
 - Calculate age and adulthood
 - Clean and immutable domain model
 - Domain-specific exceptions
+- Safe creation via `TryCreate`
 - No external dependencies
 - Fully unit tested
 
@@ -49,9 +50,7 @@ This project does **not** aim to:
 
 ## Installation
 
-> Package not published yet.
-
-Once published, it will be available via NuGet:
+Available on NuGet:
 
 ```bash
 dotnet add package Egypt.Net.Core
@@ -64,10 +63,24 @@ using Egypt.Net.Core;
 
 var nationalId = new EgyptianNationalId("30101010123456");
 
-Console.WriteLine(nationalId.BirthDate); // 2001-01-01
-Console.WriteLine(nationalId.Gender);    // Male
-Console.WriteLine(nationalId.Governorate); // Cairo
-Console.WriteLine(nationalId.IsAdult);   // true
+Console.WriteLine(nationalId.BirthDate);    // 2001-01-01
+Console.WriteLine(nationalId.Gender);       // Male
+Console.WriteLine(nationalId.Governorate);  // Cairo
+Console.WriteLine(nationalId.IsAdult);      // true
+```
+
+## Using TryCreate (recommended for beginners)
+```csharp
+using Egypt.Net.Core;
+
+if (EgyptianNationalId.TryCreate("30101010123456", out var nationalId))
+{
+    Console.WriteLine(nationalId!.Gender);
+}
+else
+{
+    Console.WriteLine("Invalid National ID");
+}
 ```
 
 ## Versioning
