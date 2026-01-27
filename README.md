@@ -27,15 +27,18 @@ Egypt.NET exists to:
 Core domain utilities for working with Egyptian national data.
 
 Current features include:
-- Egyptian National ID parsing and validation
-- Birth date extraction
-- Gender detection
-- Governorate resolution
-- Age and adulthood calculation
-- Safe creation without exceptions
-- Domain-specific exception hierarchy
-- Fully unit tested
-- No external dependencies
+- ✅ Egyptian National ID parsing and validation
+- ✅ Checksum validation for data integrity
+- ✅ Birth date extraction and age calculation
+- ✅ Gender detection (with Arabic support)
+- ✅ Governorate resolution (bilingual: Arabic & English)
+- ✅ Multiple formatting options (dashes, spaces, masked, detailed)
+- ✅ IEquatable & IComparable implementation
+- ✅ String extension methods for fluent API
+- ✅ Safe creation without exceptions
+- ✅ Domain-specific exception hierarchy
+- ✅ Fully unit tested (70+ tests)
+- ✅ No external dependencies
 
 📖 Module documentation:
 👉 [`Egypt.Net.Core/README.md`](./Egypt.Net.Core/README.md)
@@ -44,6 +47,30 @@ Current features include:
 ```bash
 dotnet add package Egypt.Net.Core
 ```
+
+---
+
+## 🚀 Quick Example
+
+```csharp
+using Egypt.Net.Core;
+
+var id = new EgyptianNationalId("30101011234565");
+
+Console.WriteLine(id.BirthDate);         // 2001-01-01
+Console.WriteLine(id.GovernorateNameAr); // القاهرة
+Console.WriteLine(id.GenderAr);          // ذكر
+Console.WriteLine(id.Age);               // 24
+Console.WriteLine(id.FormatWithDashes()); // 3-010101-01-23456
+
+// String extensions
+if ("30101011234565".IsValidEgyptianNationalId())
+{
+    var nationalId = "30101011234565".ToEgyptianNationalId();
+    Console.WriteLine($"{nationalId?.GovernorateNameAr} - {nationalId?.Age} سنة");
+}
+```
+
 ---
 
 ## 🧠 Philosophy
@@ -53,6 +80,8 @@ dotnet add package Egypt.Net.Core
 - Fail fast or fail safely
 - No magic
 - Beginner-friendly but production-aware
+- Bilingual support (Arabic & English)
+- Clean, immutable objects
 
 ---
 
@@ -62,12 +91,15 @@ Each module includes:
 - Dedicated test project
 - Clear and readable unit tests
 - Realistic test cases that reflect real usage
+- 70+ comprehensive tests
 
 ---
 
 ## 🤝 Contributing
 
 Contributions are welcome, especially from beginners.
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 Recommended flow:
 - Fork the repository
@@ -77,15 +109,29 @@ Recommended flow:
 
 ---
 
-## 🗺 Roadmap (High-Level)
+## 🗺 Roadmap
 
-- Improve National ID validation rules
-- Add more safe factory APIs
-- Introduce more Egyptian domain models
-- Improve documentation and examples
+### Completed ✅
+- Egyptian National ID validation and parsing
+- Checksum validation
+- Arabic language support
+- Multiple formatting options
+- Equality and comparison support
+- String extension methods
+
+### Upcoming 🔜
+- JSON serialization support
+- ASP.NET Core model binding
+- FluentValidation integration
+- More Egyptian domain models (phone numbers, postal codes, etc.)
+- Performance optimizations with Span<T>
 
 ---
 
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+---
+
+Made with ❤️ for the Egyptian developer community

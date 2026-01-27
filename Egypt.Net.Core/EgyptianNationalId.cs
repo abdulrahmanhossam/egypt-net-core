@@ -1,4 +1,5 @@
 using Egypt.Net.Core.Exceptions;
+using System;
 
 namespace Egypt.Net.Core;
 
@@ -7,7 +8,7 @@ namespace Egypt.Net.Core;
 /// functionality to extract personal information
 /// such as birth date, age, gender, and governorate.
 /// </summary>
-public sealed class EgyptianNationalId
+public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, IComparable<EgyptianNationalId>
 {
 
     private const int CenturyDigitIndex = 0;
@@ -19,6 +20,8 @@ public sealed class EgyptianNationalId
     private const int SerialLength = 4;
     // 13th digit (0-based index 12) determines gender
     private const int GenderDigitIndex = 12;
+    // Checksum weights for validation (first 13 digits)
+    private static readonly int[] ChecksumWeights = { 2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2 };
 
 
     /// <summary>
@@ -67,6 +70,16 @@ public sealed class EgyptianNationalId
     public Governorate Governorate { get; }
 
     /// <summary>
+    /// Gets the governorate name in Arabic.
+    /// </summary>
+    public string GovernorateNameAr => Governorate.GetArabicName();
+
+    /// <summary>
+    /// Gets the governorate name in English.
+    /// </summary>
+    public string GovernorateNameEn => Governorate.GetEnglishName();
+
+    /// <summary>
     /// Gets the serial number part of the National ID.
     /// </summary>
     public int SerialNumber { get; }
@@ -77,9 +90,15 @@ public sealed class EgyptianNationalId
     public Gender Gender { get; }
 
     /// <summary>
+    /// Gets the gender in Arabic.
+    /// </summary>
+    public string GenderAr => Gender == Gender.Male ? "ذكر" : "أنثى";
+
+    /// <summary>
     /// Initializes a new instance of <see cref="EgyptianNationalId"/>.
     /// </summary>
     /// <param name="value">The 14-digit Egyptian National ID.</param>
+    /// <param name="validateChecksum">Whether to validate the checksum digit (default: true).</param>
     /// <exception cref="InvalidNationalIdFormatException">
     /// Thrown when the National ID format is invalid.
     /// </exception>
@@ -89,12 +108,18 @@ public sealed class EgyptianNationalId
     /// <exception cref="InvalidGovernorateCodeException">
     /// Thrown when the governorate code is not recognized.
     /// </exception>
-    public EgyptianNationalId(string value)
+    /// <exception cref="InvalidChecksumException">
+    /// Thrown when the checksum validation fails (if enabled).
+    /// </exception>
+    public EgyptianNationalId(string value, bool validateChecksum = true)
     {
         if (!IsValidFormat(value))
             throw new InvalidNationalIdFormatException(
                 "National ID must be exactly 14 digits long and contain digits only."
             );
+
+        if (validateChecksum && !ValidateChecksum(value))
+            throw new InvalidChecksumException();
 
         Value = value;
 
@@ -128,16 +153,42 @@ public sealed class EgyptianNationalId
     }
 
     /// <summary>
+    /// Validates the checksum digit of an Egyptian National ID.
+    /// The checksum is calculated using a weighted algorithm on the first 13 digits,
+    /// and the 14th digit should match the calculated checksum.
+    /// </summary>
+    /// <param name="value">The National ID to validate.</param>
+    /// <returns>True if the checksum is valid; otherwise, false.</returns>
+    public static bool ValidateChecksum(string value)
+    {
+        if (!IsValidFormat(value))
+            return false;
+
+        int sum = 0;
+        for (int i = 0; i < 13; i++)
+        {
+            int digit = value[i] - '0';
+            sum += digit * ChecksumWeights[i];
+        }
+
+        int calculatedChecksum = sum % 10;
+        int providedChecksum = value[13] - '0';
+
+        return calculatedChecksum == providedChecksum;
+    }
+
+    /// <summary>
     /// Determines whether the provided value represents
     /// a valid Egyptian National ID (format and domain rules).
     /// </summary>
     /// <param name="value">The National ID value to validate.</param>
+    /// <param name="validateChecksum">Whether to validate the checksum digit (default: true).</param>
     /// <returns>
     /// True if the value is a valid Egyptian National ID; otherwise, false.
     /// </returns>
-    public static bool IsValid(string value)
+    public static bool IsValid(string value, bool validateChecksum = true)
     {
-        return TryCreate(value, out _);
+        return TryCreate(value, out _, validateChecksum);
     }
 
     /// <summary>
@@ -151,6 +202,7 @@ public sealed class EgyptianNationalId
     /// When this method returns <c>true</c>, contains the created
     /// <see cref="EgyptianNationalId"/> instance; otherwise, <c>null</c>.
     /// </param>
+    /// <param name="validateChecksum">Whether to validate the checksum digit (default: true).</param>
     /// <returns>
     /// <c>true</c> if the value represents a valid Egyptian National ID;
     /// otherwise, <c>false</c>.
@@ -159,7 +211,7 @@ public sealed class EgyptianNationalId
     /// This method is recommended for safe validation scenarios where
     /// exception handling is not desired.
     /// </remarks>
-    public static bool TryCreate(string value, out EgyptianNationalId? nationalId)
+    public static bool TryCreate(string value, out EgyptianNationalId? nationalId, bool validateChecksum = true)
     {
         nationalId = null;
 
@@ -168,13 +220,140 @@ public sealed class EgyptianNationalId
 
         try
         {
-            nationalId = new EgyptianNationalId(value);
+            nationalId = new EgyptianNationalId(value, validateChecksum);
             return true;
         }
         catch (EgyptianNationalIdException)
         {
             return false;
         }
+    }
+
+    #region IEquatable Implementation
+
+    /// <summary>
+    /// Determines whether the specified <see cref="EgyptianNationalId"/> is equal to the current instance.
+    /// </summary>
+    /// <param name="other">The National ID to compare with the current instance.</param>
+    /// <returns>True if the specified National ID is equal to the current instance; otherwise, false.</returns>
+    public bool Equals(EgyptianNationalId? other)
+    {
+        if (other is null)
+            return false;
+
+        if (ReferenceEquals(this, other))
+            return true;
+
+        return Value == other.Value;
+    }
+
+    /// <summary>
+    /// Determines whether the specified object is equal to the current instance.
+    /// </summary>
+    /// <param name="obj">The object to compare with the current instance.</param>
+    /// <returns>True if the specified object is equal to the current instance; otherwise, false.</returns>
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as EgyptianNationalId);
+    }
+
+    /// <summary>
+    /// Returns the hash code for this instance.
+    /// </summary>
+    /// <returns>A hash code for the current instance.</returns>
+    public override int GetHashCode()
+    {
+        return Value.GetHashCode();
+    }
+
+    /// <summary>
+    /// Determines whether two specified instances of <see cref="EgyptianNationalId"/> are equal.
+    /// </summary>
+    public static bool operator ==(EgyptianNationalId? left, EgyptianNationalId? right)
+    {
+        if (left is null)
+            return right is null;
+
+        return left.Equals(right);
+    }
+
+    /// <summary>
+    /// Determines whether two specified instances of <see cref="EgyptianNationalId"/> are not equal.
+    /// </summary>
+    public static bool operator !=(EgyptianNationalId? left, EgyptianNationalId? right)
+    {
+        return !(left == right);
+    }
+
+    #endregion
+
+    #region IComparable Implementation
+
+    /// <summary>
+    /// Compares the current instance with another <see cref="EgyptianNationalId"/> based on birth date.
+    /// </summary>
+    /// <param name="other">The National ID to compare with this instance.</param>
+    /// <returns>
+    /// A value that indicates the relative order of the objects being compared.
+    /// Less than zero: This instance precedes other in the sort order (older).
+    /// Zero: This instance occurs in the same position in the sort order as other.
+    /// Greater than zero: This instance follows other in the sort order (younger).
+    /// </returns>
+    public int CompareTo(EgyptianNationalId? other)
+    {
+        if (other is null)
+            return 1;
+
+        // Compare by birth date first (older people come first)
+        int birthDateComparison = BirthDate.CompareTo(other.BirthDate);
+        if (birthDateComparison != 0)
+            return birthDateComparison;
+
+        // If birth dates are equal, compare by serial number
+        return SerialNumber.CompareTo(other.SerialNumber);
+    }
+
+    /// <summary>
+    /// Determines whether one National ID is less than another based on birth date.
+    /// </summary>
+    public static bool operator <(EgyptianNationalId? left, EgyptianNationalId? right)
+    {
+        return left is null ? right is not null : left.CompareTo(right) < 0;
+    }
+
+    /// <summary>
+    /// Determines whether one National ID is less than or equal to another based on birth date.
+    /// </summary>
+    public static bool operator <=(EgyptianNationalId? left, EgyptianNationalId? right)
+    {
+        return left is null || left.CompareTo(right) <= 0;
+    }
+
+    /// <summary>
+    /// Determines whether one National ID is greater than another based on birth date.
+    /// </summary>
+    public static bool operator >(EgyptianNationalId? left, EgyptianNationalId? right)
+    {
+        return left is not null && left.CompareTo(right) > 0;
+    }
+
+    /// <summary>
+    /// Determines whether one National ID is greater than or equal to another based on birth date.
+    /// </summary>
+    public static bool operator >=(EgyptianNationalId? left, EgyptianNationalId? right)
+    {
+        return left is null ? right is null : left.CompareTo(right) >= 0;
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Returns a string representation of the National ID.
+    /// </summary>
+    /// <returns>The 14-digit National ID value.</returns>
+    public override string ToString()
+    {
+        return Value;
     }
 
     private int CalculateAge()
