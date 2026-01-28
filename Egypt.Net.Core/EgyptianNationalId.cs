@@ -98,20 +98,18 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
     /// Initializes a new instance of <see cref="EgyptianNationalId"/>.
     /// </summary>
     /// <param name="value">The 14-digit Egyptian National ID.</param>
-    /// <param name="validateChecksum">Whether to validate the checksum digit (default: true).</param>
+    /// <param name="validateChecksum">
+    /// Whether to validate the 14th checksum digit.
+    /// Default is FALSE because the official algorithm is not publicly documented.
+    /// Set to TRUE only if you have the verified algorithm.
+    /// </param>
     /// <exception cref="InvalidNationalIdFormatException">
     /// Thrown when the National ID format is invalid.
     /// </exception>
-    /// <exception cref="InvalidBirthDateException">
-    /// Thrown when the extracted birth date is invalid.
-    /// </exception>
-    /// <exception cref="InvalidGovernorateCodeException">
-    /// Thrown when the governorate code is not recognized.
-    /// </exception>
     /// <exception cref="InvalidChecksumException">
-    /// Thrown when the checksum validation fails (if enabled).
+    /// Thrown when validateChecksum is true and the checksum is invalid.
     /// </exception>
-    public EgyptianNationalId(string value, bool validateChecksum = true)
+    public EgyptianNationalId(string value, bool validateChecksum = false)
     {
         if (!IsValidFormat(value))
             throw new InvalidNationalIdFormatException(
@@ -186,7 +184,7 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
     /// <returns>
     /// True if the value is a valid Egyptian National ID; otherwise, false.
     /// </returns>
-    public static bool IsValid(string value, bool validateChecksum = true)
+    public static bool IsValid(string value, bool validateChecksum = false)
     {
         return TryCreate(value, out _, validateChecksum);
     }
@@ -211,7 +209,7 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
     /// This method is recommended for safe validation scenarios where
     /// exception handling is not desired.
     /// </remarks>
-    public static bool TryCreate(string value, out EgyptianNationalId? nationalId, bool validateChecksum = true)
+    public static bool TryCreate(string value, out EgyptianNationalId? nationalId, bool validateChecksum = false)
     {
         nationalId = null;
 

@@ -30,24 +30,21 @@ public class EgyptianNationalIdChecksumTests
     }
 
     [Fact]
-    public void Constructor_ShouldThrowInvalidChecksumException_WhenChecksumIsWrong()
+    public void Constructor_WithInvalidChecksum_ShouldThrow()
     {
-        var idWithWrongChecksum = "30101011234568";
-
+        // Explicit checksum validation
         Assert.Throws<InvalidChecksumException>(() =>
-        {
-            new EgyptianNationalId(idWithWrongChecksum);
-        });
+            new EgyptianNationalId("30101010123459", validateChecksum: true));
     }
 
     [Fact]
-    public void Constructor_WithValidateChecksumFalse_ShouldNotThrow_EvenWithWrongChecksum()
+    public void Constructor_WithValidChecksum_ShouldNotThrow()
     {
-        var idWithWrongChecksum = "30101011234568";
+        // Explicit checksum validation
+        var exception = Record.Exception(() =>
+            new EgyptianNationalId("30101010123458", validateChecksum: true));
 
-        var nationalId = new EgyptianNationalId(idWithWrongChecksum, validateChecksum: false);
-
-        Assert.NotNull(nationalId);
+        Assert.Null(exception);
     }
 
     [Fact]
@@ -90,5 +87,21 @@ public class EgyptianNationalIdChecksumTests
 
         Assert.True(result);
         Assert.NotNull(nationalId);
+    }
+
+    [Fact]
+    public void IsValid_ByDefault_ShouldNotValidateChecksum()
+    {
+        // Invalid checksum should be accepted by default
+        bool isValid = EgyptianNationalId.IsValid("30101010123459");
+        Assert.True(isValid);
+    }
+
+    [Fact]
+    public void IsValid_WithChecksumEnabled_ShouldValidate()
+    {
+        // Invalid checksum should be rejected when validation enabled
+        bool isValid = EgyptianNationalId.IsValid("30101010123459", validateChecksum: true);
+        Assert.False(isValid);
     }
 }

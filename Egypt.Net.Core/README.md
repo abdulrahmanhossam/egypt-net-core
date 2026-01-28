@@ -43,6 +43,67 @@ This library exists to:
 - ✅ **Enhanced Properties**: `GovernorateNameAr`, `GovernorateNameEn`, `GenderAr`
 
 ---
+## ⚠️ Checksum Validation
+
+### Default Behavior
+
+By default, the library **does NOT validate** the 14th checksum digit.
+```csharp
+// Default - no checksum validation
+var id = new EgyptianNationalId("30101010123458");  // ✅ Accepted
+```
+
+### Why is checksum disabled by default?
+
+1. **Not publicly documented** - The official algorithm is not available
+2. **Prevents false rejections** - Real National IDs won't be rejected
+3. **Security** - Prevents misuse for generating fake IDs
+4. **Flexibility** - You can enable it if you have the verified algorithm
+
+### How to enable checksum validation?
+
+If you have the official checksum algorithm:
+```csharp
+// Enable checksum validation
+var id = new EgyptianNationalId("30101010123458", validateChecksum: true);
+
+// Or with IsValid
+bool isValid = EgyptianNationalId.IsValid("30101010123458", validateChecksum: true);
+
+// Or with string extensions
+bool isValid = "30101010123458".IsValidEgyptianNationalId(validateChecksum: true);
+```
+
+### What IS validated by default?
+
+Even without checksum validation, the library validates:
+
+✅ **Format** - Exactly 14 digits
+✅ **Birth date** - Valid calendar date
+✅ **Governorate** - Valid governorate code (01-88)
+✅ **Century** - Valid century digit (2 or 3)
+✅ **Domain rules** - All structural rules
+
+This is **sufficient for most production use cases**.
+
+### For developers with the official algorithm
+
+If you have access to the verified checksum algorithm:
+
+1. Update the `ValidateChecksum` method in `EgyptianNationalId.cs`
+2. Set `validateChecksum: true` when creating instances
+3. Consider contributing it back (with proper authorization)
+```csharp
+// In your fork/custom build
+public static bool ValidateChecksum(string value)
+{
+    // Your verified algorithm here
+    // ...
+}
+
+// Then use it
+var id = new EgyptianNationalId(userInput, validateChecksum: true);
+```
 
 ## Installation
 
@@ -51,8 +112,9 @@ Available on NuGet:
 ```bash
 dotnet add package Egypt.Net.Core
 ```
+**Note:** v1.0.1+ has checksum validation disabled by default for better compatibility with real National IDs.
 
-## Basic Usage
+## Basic Usage  (No Checksum Validation)
 
 ```csharp
 using Egypt.Net.Core;

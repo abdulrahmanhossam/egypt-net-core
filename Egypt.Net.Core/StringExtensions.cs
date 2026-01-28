@@ -9,9 +9,12 @@ public static class StringExtensions
     /// Validates if the string is a valid Egyptian National ID.
     /// </summary>
     /// <param name="value">The string to validate.</param>
-    /// <param name="validateChecksum">Whether to validate the checksum digit (default: true).</param>
+    /// <param name="validateChecksum">
+    /// Whether to validate the checksum. Default is FALSE.
+    /// Set to TRUE only if you have the verified checksum algorithm.
+    /// </param>
     /// <returns>True if the string is a valid Egyptian National ID; otherwise, false.</returns>
-    public static bool IsValidEgyptianNationalId(this string value, bool validateChecksum = true)
+    public static bool IsValidEgyptianNationalId(this string value, bool validateChecksum = false)
     {
         return EgyptianNationalId.IsValid(value, validateChecksum);
     }
@@ -20,9 +23,12 @@ public static class StringExtensions
     /// Converts the string to an EgyptianNationalId instance if valid.
     /// </summary>
     /// <param name="value">The string to convert.</param>
-    /// <param name="validateChecksum">Whether to validate the checksum digit (default: true).</param>
+    /// <param name="validateChecksum">
+    /// Whether to validate the checksum. Default is FALSE.
+    /// Set to TRUE only if you have the verified checksum algorithm.
+    /// </param>
     /// <returns>An EgyptianNationalId instance if valid; otherwise, null.</returns>
-    public static EgyptianNationalId? ToEgyptianNationalId(this string value, bool validateChecksum = true)
+    public static EgyptianNationalId? ToEgyptianNationalId(this string value, bool validateChecksum = false)
     {
         return EgyptianNationalId.TryCreate(value, out var nationalId, validateChecksum)
             ? nationalId
@@ -34,9 +40,12 @@ public static class StringExtensions
     /// </summary>
     /// <param name="value">The string to parse.</param>
     /// <param name="nationalId">The resulting National ID if parsing succeeds.</param>
-    /// <param name="validateChecksum">Whether to validate the checksum digit (default: true).</param>
+    /// <param name="validateChecksum">
+    /// Whether to validate the checksum. Default is FALSE.
+    /// Set to TRUE only if you have the verified checksum algorithm.
+    /// </param>
     /// <returns>True if parsing succeeds; otherwise, false.</returns>
-    public static bool TryParseAsNationalId(this string value, out EgyptianNationalId? nationalId, bool validateChecksum = true)
+    public static bool TryParseAsNationalId(this string value, out EgyptianNationalId? nationalId, bool validateChecksum = false)
     {
         return EgyptianNationalId.TryCreate(value, out nationalId, validateChecksum);
     }

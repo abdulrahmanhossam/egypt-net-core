@@ -12,10 +12,10 @@ public class StringExtensionsTests
     private const string InvalidChecksumId = "30101011234568";
 
     [Fact]
-    public void IsValidEgyptianNationalId_ShouldReturnTrue_ForValidId()
+    public void IsValidEgyptianNationalId_ShouldReturnTrue_WhenValid()
     {
-        var result = ValidId.IsValidEgyptianNationalId();
-
+        // Default behavior - no checksum
+        var result = "30101010123458".IsValidEgyptianNationalId();
         Assert.True(result);
     }
 
@@ -128,5 +128,21 @@ public class StringExtensionsTests
         Assert.False(emptyString.IsValidEgyptianNationalId());
         Assert.Null(nullString.ToEgyptianNationalId());
         Assert.Null(emptyString.ToEgyptianNationalId());
+    }
+
+    [Fact]
+    public void IsValidEgyptianNationalId_ByDefault_ShouldNotValidateChecksum()
+    {
+        // Invalid checksum should be accepted by default
+        var result = "30101010123459".IsValidEgyptianNationalId();
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void IsValidEgyptianNationalId_WithChecksumEnabled_ShouldValidate()
+    {
+        // Invalid checksum should be rejected when enabled
+        var result = "30101010123459".IsValidEgyptianNationalId(validateChecksum: true);
+        Assert.False(result);
     }
 }
