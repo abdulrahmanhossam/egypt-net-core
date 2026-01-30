@@ -265,6 +265,58 @@ var list = new List<EgyptianNationalId> { id1, id3 };
 list.Sort(); // Sorted by birth date (oldest first)
 ```
 
+## 🗺️ Geographic Region Classification 🆕
+
+Extract the geographic region where a person was born:
+```csharp
+var id = new EgyptianNationalId("30101010123458");
+
+// Region information
+Console.WriteLine(id.BirthRegion);         // GreaterCairo
+Console.WriteLine(id.BirthRegionNameAr);   // القاهرة الكبرى
+Console.WriteLine(id.BirthRegionNameEn);   // GreaterCairo
+
+// Boolean helpers
+Console.WriteLine(id.IsFromUpperEgypt);    // false
+Console.WriteLine(id.IsFromLowerEgypt);    // true (Greater Cairo)
+Console.WriteLine(id.IsFromGreaterCairo);  // true
+Console.WriteLine(id.IsFromDelta);         // false
+Console.WriteLine(id.IsFromSinai);         // false
+Console.WriteLine(id.IsFromCoastalRegion); // false
+Console.WriteLine(id.IsBornAbroad);        // false
+```
+
+### Regions of Egypt
+
+Egypt is divided into 7 geographic regions:
+
+1. **Greater Cairo** (القاهرة الكبرى) - Cairo, Giza, Qalyubia
+2. **Delta** (الدلتا) - Alexandria, Dakahlia, Sharqia, and 5 more
+3. **Canal** (قناة السويس) - Port Said, Suez, Ismailia
+4. **Upper Egypt** (الصعيد) - Beni Suef, Asyut, Luxor, and 5 more
+5. **Sinai & Red Sea** (سيناء والبحر الأحمر) - North Sinai, South Sinai, Red Sea
+6. **Western Desert** (الصحراء الغربية) - New Valley, Matrouh
+7. **Foreign** (خارج الجمهورية) - Births abroad
+
+### Use Cases
+```csharp
+// Demographic analysis
+var egyptians = GetNationalIds();
+var fromUpperEgypt = egyptians.Count(id => id.IsFromUpperEgypt);
+var fromDelta = egyptians.Count(id => id.IsFromDelta);
+
+// Regional targeting
+if (user.NationalId.IsFromCoastalRegion)
+{
+    ShowBeachRelatedOffers();
+}
+
+// Statistics
+var byRegion = employees
+    .GroupBy(e => e.NationalId.BirthRegion)
+    .OrderByDescending(g => g.Count());
+```
+
 ## Exception Handling
 
 The library provides a clear exception hierarchy:

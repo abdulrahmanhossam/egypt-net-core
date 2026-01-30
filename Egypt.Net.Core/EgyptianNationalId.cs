@@ -95,6 +95,57 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
     public string GenderAr => Gender == Gender.Male ? "ذكر" : "أنثى";
 
     /// <summary>
+    /// Gets the geographic region where the person was born.
+    /// </summary>
+    public Region BirthRegion => Governorate.GetRegion();
+
+    /// <summary>
+    /// Gets the birth region name in Arabic.
+    /// </summary>
+    public string BirthRegionNameAr => BirthRegion.GetArabicName();
+
+    /// <summary>
+    /// Gets the birth region name in English.
+    /// </summary>
+    public string BirthRegionNameEn => BirthRegion.GetEnglishName();
+
+    /// <summary>
+    /// Indicates whether the person was born in Upper Egypt (الصعيد).
+    /// </summary>
+    public bool IsFromUpperEgypt => BirthRegion.IsUpperEgypt();
+
+    /// <summary>
+    /// Indicates whether the person was born in Lower Egypt (الوجه البحري).
+    /// Lower Egypt includes the Delta and Greater Cairo regions.
+    /// </summary>
+    public bool IsFromLowerEgypt => BirthRegion.IsLowerEgypt();
+
+    /// <summary>
+    /// Indicates whether the person was born in a coastal region.
+    /// </summary>
+    public bool IsFromCoastalRegion => BirthRegion.IsCoastal();
+
+    /// <summary>
+    /// Indicates whether the person was born in Greater Cairo.
+    /// </summary>
+    public bool IsFromGreaterCairo => BirthRegion == Region.GreaterCairo;
+
+    /// <summary>
+    /// Indicates whether the person was born in the Delta region.
+    /// </summary>
+    public bool IsFromDelta => BirthRegion == Region.Delta;
+
+    /// <summary>
+    /// Indicates whether the person was born in the Sinai or Red Sea region.
+    /// </summary>
+    public bool IsFromSinai => BirthRegion == Region.SinaiAndRedSea;
+
+    /// <summary>
+    /// Indicates whether the person was born abroad (outside Egypt).
+    /// </summary>
+    public bool IsBornAbroad => BirthRegion == Region.Foreign;
+
+    /// <summary>
     /// Initializes a new instance of <see cref="EgyptianNationalId"/>.
     /// </summary>
     /// <param name="value">The 14-digit Egyptian National ID.</param>
