@@ -44,4 +44,59 @@ public static class GovernorateExtensions
     {
         return (governorate.GetArabicName(), governorate.GetEnglishName());
     }
+
+    /// <summary>
+    /// Gets the geographic region for the governorate.
+    /// </summary>
+    /// <param name="governorate">The governorate enum value.</param>
+    /// <returns>The region that contains this governorate.</returns>
+    public static Region GetRegion(this Governorate governorate)
+    {
+        return governorate switch
+        {
+            // Greater Cairo (القاهرة الكبرى)
+            Governorate.Cairo => Region.GreaterCairo,
+            Governorate.Giza => Region.GreaterCairo,
+            Governorate.Qalyubia => Region.GreaterCairo,
+
+            // Delta (الدلتا)
+            Governorate.Alexandria => Region.Delta,
+            Governorate.Damietta => Region.Delta,
+            Governorate.Dakahlia => Region.Delta,
+            Governorate.Sharqia => Region.Delta,
+            Governorate.KafrElSheikh => Region.Delta,
+            Governorate.Gharbia => Region.Delta,
+            Governorate.Monufia => Region.Delta,
+            Governorate.Beheira => Region.Delta,
+
+            // Canal (قناة السويس)
+            Governorate.PortSaid => Region.Canal,
+            Governorate.Suez => Region.Canal,
+            Governorate.Ismailia => Region.Canal,
+
+            // Upper Egypt (الصعيد)
+            Governorate.BeniSuef => Region.UpperEgypt,
+            Governorate.Fayoum => Region.UpperEgypt,
+            Governorate.Minya => Region.UpperEgypt,
+            Governorate.Asyut => Region.UpperEgypt,
+            Governorate.Sohag => Region.UpperEgypt,
+            Governorate.Qena => Region.UpperEgypt,
+            Governorate.Aswan => Region.UpperEgypt,
+            Governorate.Luxor => Region.UpperEgypt,
+
+            // Sinai & Red Sea (سيناء والبحر الأحمر)
+            Governorate.RedSea => Region.SinaiAndRedSea,
+            Governorate.NorthSinai => Region.SinaiAndRedSea,
+            Governorate.SouthSinai => Region.SinaiAndRedSea,
+
+            // Western Desert (الصحراء الغربية)
+            Governorate.NewValley => Region.WesternDesert,
+            Governorate.Matrouh => Region.WesternDesert,
+
+            // Foreign (خارج الجمهورية)
+            Governorate.Foreign => Region.Foreign,
+
+            _ => throw new InvalidOperationException($"Unknown governorate: {governorate}")
+        };
+    }
 }
