@@ -2,20 +2,24 @@ namespace Egypt.Net.Core.Tests;
 
 public class RegionTests
 {
+    // Format: C YY MM DD GG SSSS X
+    //         3 01 01 01 01 2345 8  = Cairo (01), Born 2001-01-01
+    //         3 01 01 01 21 2345 0  = Giza (21), Born 2001-01-01
+
     [Theory]
-    [InlineData("30101010123458", Region.GreaterCairo)]  // Cairo
-    [InlineData("30221010123456", Region.GreaterCairo)]  // Giza
-    [InlineData("30214010123451", Region.GreaterCairo)]  // Qalyubia
-    [InlineData("30202010123459", Region.Delta)]          // Alexandria
-    [InlineData("30212010123453", Region.Delta)]          // Dakahlia
-    [InlineData("30303010123452", Region.Canal)]          // Port Said
-    [InlineData("30304010123454", Region.Canal)]          // Suez
-    [InlineData("30222010123458", Region.UpperEgypt)]     // Beni Suef
-    [InlineData("30225010123454", Region.UpperEgypt)]     // Asyut
-    [InlineData("30331010123451", Region.SinaiAndRedSea)] // Red Sea
-    [InlineData("30334010123458", Region.SinaiAndRedSea)] // North Sinai
-    [InlineData("30332010123453", Region.WesternDesert)]  // New Valley
-    [InlineData("30888010123450", Region.Foreign)]        // Foreign
+    [InlineData("30101010123458", Region.GreaterCairo)]  // Cairo (01)
+    [InlineData("30101012112340", Region.GreaterCairo)]  // Giza (21)
+    [InlineData("30101011412355", Region.GreaterCairo)]  // Qalyubia (14)
+    [InlineData("30101010212351", Region.Delta)]          // Alexandria (02)
+    [InlineData("30101011212357", Region.Delta)]          // Dakahlia (12)
+    [InlineData("30101010312354", Region.Canal)]          // Port Said (03)
+    [InlineData("30101010412357", Region.Canal)]          // Suez (04)
+    [InlineData("30101012212353", Region.UpperEgypt)]     // Beni Suef (22)
+    [InlineData("30101012512359", Region.UpperEgypt)]     // Asyut (25)
+    [InlineData("30101013112356", Region.SinaiAndRedSea)] // Red Sea (31)
+    [InlineData("30101013412353", Region.SinaiAndRedSea)] // North Sinai (34)
+    [InlineData("30101013212359", Region.WesternDesert)]  // New Valley (32)
+    [InlineData("30101018812355", Region.Foreign)]        // Foreign (88)
     public void BirthRegion_ShouldReturnCorrectRegion(string nationalId, Region expectedRegion)
     {
         // Arrange & Act
@@ -27,9 +31,9 @@ public class RegionTests
 
     [Theory]
     [InlineData("30101010123458", "القاهرة الكبرى")]  // Cairo
-    [InlineData("30212010123453", "الدلتا")]          // Dakahlia
-    [InlineData("30225010123454", "الصعيد")]          // Asyut
-    [InlineData("30331010123451", "سيناء والبحر الأحمر")] // Red Sea
+    [InlineData("30101011212357", "الدلتا")]          // Dakahlia
+    [InlineData("30101012512359", "الصعيد")]          // Asyut
+    [InlineData("30101013112356", "سيناء والبحر الأحمر")] // Red Sea
     public void BirthRegionNameAr_ShouldReturnArabicName(string nationalId, string expectedName)
     {
         // Arrange & Act
@@ -41,9 +45,9 @@ public class RegionTests
 
     [Theory]
     [InlineData("30101010123458", "GreaterCairo")]
-    [InlineData("30212010123453", "Delta")]
-    [InlineData("30225010123454", "UpperEgypt")]
-    [InlineData("30331010123451", "SinaiAndRedSea")]
+    [InlineData("30101011212357", "Delta")]
+    [InlineData("30101012512359", "UpperEgypt")]
+    [InlineData("30101013112356", "SinaiAndRedSea")]
     public void BirthRegionNameEn_ShouldReturnEnglishName(string nationalId, string expectedName)
     {
         // Arrange & Act
@@ -54,11 +58,11 @@ public class RegionTests
     }
 
     [Theory]
-    [InlineData("30222010123458", true)]   // Beni Suef - Upper Egypt
-    [InlineData("30225010123454", true)]   // Asyut - Upper Egypt
-    [InlineData("30228010123450", true)]   // Aswan - Upper Egypt
-    [InlineData("30101010123458", false)]  // Cairo - not Upper Egypt
-    [InlineData("30212010123453", false)]  // Dakahlia - not Upper Egypt
+    [InlineData("30101012212353", true)]   // Beni Suef (22) - Upper Egypt
+    [InlineData("30101012512359", true)]   // Asyut (25) - Upper Egypt
+    [InlineData("30101012812355", true)]   // Aswan (28) - Upper Egypt
+    [InlineData("30101010123458", false)]  // Cairo (01) - not Upper Egypt
+    [InlineData("30101011212357", false)]  // Dakahlia (12) - not Upper Egypt
     public void IsFromUpperEgypt_ShouldReturnCorrectValue(string nationalId, bool expected)
     {
         // Arrange & Act
@@ -69,12 +73,12 @@ public class RegionTests
     }
 
     [Theory]
-    [InlineData("30101010123458", true)]   // Cairo - Lower Egypt
-    [InlineData("30221010123456", true)]   // Giza - Lower Egypt
-    [InlineData("30212010123453", true)]   // Dakahlia - Lower Egypt (Delta)
-    [InlineData("30202010123459", true)]   // Alexandria - Lower Egypt (Delta)
-    [InlineData("30225010123454", false)]  // Asyut - Upper Egypt
-    [InlineData("30331010123451", false)]  // Red Sea - not Lower Egypt
+    [InlineData("30101010123458", true)]   // Cairo (01) - Lower Egypt
+    [InlineData("30101012112340", true)]   // Giza (21) - Lower Egypt
+    [InlineData("30101011212357", true)]   // Dakahlia (12) - Lower Egypt (Delta)
+    [InlineData("30101010212351", true)]   // Alexandria (02) - Lower Egypt (Delta)
+    [InlineData("30101012512359", false)]  // Asyut (25) - Upper Egypt
+    [InlineData("30101013112356", false)]  // Red Sea (31) - not Lower Egypt
     public void IsFromLowerEgypt_ShouldReturnCorrectValue(string nationalId, bool expected)
     {
         // Arrange & Act
@@ -85,9 +89,9 @@ public class RegionTests
     }
 
     [Theory]
-    [InlineData("30101010123458", true)]   // Cairo - Greater Cairo
-    [InlineData("30221010123456", true)]   // Giza - Greater Cairo
-    [InlineData("30212010123453", false)]  // Dakahlia - not Greater Cairo
+    [InlineData("30101010123458", true)]   // Cairo (01) - Greater Cairo
+    [InlineData("30101012112340", true)]   // Giza (21) - Greater Cairo
+    [InlineData("30101011212357", false)]  // Dakahlia (12) - not Greater Cairo
     public void IsFromGreaterCairo_ShouldReturnCorrectValue(string nationalId, bool expected)
     {
         // Arrange & Act
@@ -98,9 +102,9 @@ public class RegionTests
     }
 
     [Theory]
-    [InlineData("30212010123453", true)]   // Dakahlia - Delta
-    [InlineData("30202010123459", true)]   // Alexandria - Delta
-    [InlineData("30101010123458", false)]  // Cairo - not Delta
+    [InlineData("30101011212357", true)]   // Dakahlia (12) - Delta
+    [InlineData("30101010212351", true)]   // Alexandria (02) - Delta
+    [InlineData("30101010123458", false)]  // Cairo (01) - not Delta
     public void IsFromDelta_ShouldReturnCorrectValue(string nationalId, bool expected)
     {
         // Arrange & Act
@@ -111,9 +115,9 @@ public class RegionTests
     }
 
     [Theory]
-    [InlineData("30331010123451", true)]   // Red Sea - Sinai
-    [InlineData("30334010123458", true)]   // North Sinai - Sinai
-    [InlineData("30101010123458", false)]  // Cairo - not Sinai
+    [InlineData("30101013112356", true)]   // Red Sea (31) - Sinai
+    [InlineData("30101013412353", true)]   // North Sinai (34) - Sinai
+    [InlineData("30101010123458", false)]  // Cairo (01) - not Sinai
     public void IsFromSinai_ShouldReturnCorrectValue(string nationalId, bool expected)
     {
         // Arrange & Act
@@ -124,8 +128,8 @@ public class RegionTests
     }
 
     [Theory]
-    [InlineData("30888010123450", true)]   // Foreign - born abroad
-    [InlineData("30101010123458", false)]  // Cairo - not born abroad
+    [InlineData("30101018812355", true)]   // Foreign (88) - born abroad
+    [InlineData("30101010123458", false)]  // Cairo (01) - not born abroad
     public void IsBornAbroad_ShouldReturnCorrectValue(string nationalId, bool expected)
     {
         // Arrange & Act
@@ -136,12 +140,12 @@ public class RegionTests
     }
 
     [Theory]
-    [InlineData("30202010123459", true)]   // Alexandria - coastal (Delta)
-    [InlineData("30303010123452", true)]   // Port Said - coastal (Canal)
-    [InlineData("30331010123451", true)]   // Red Sea - coastal
-    [InlineData("30333010123457", true)]   // Matrouh - coastal
-    [InlineData("30101010123458", false)]  // Cairo - not coastal
-    [InlineData("30225010123454", false)]  // Asyut - not coastal
+    [InlineData("30101010212351", true)]   // Alexandria (02) - coastal (Delta)
+    [InlineData("30101010312354", true)]   // Port Said (03) - coastal (Canal)
+    [InlineData("30101013112356", true)]   // Red Sea (31) - coastal
+    [InlineData("30101013312352", true)]   // Matrouh (33) - coastal
+    [InlineData("30101010123458", false)]  // Cairo (01) - not coastal
+    [InlineData("30101012512359", false)]  // Asyut (25) - not coastal
     public void IsFromCoastalRegion_ShouldReturnCorrectValue(string nationalId, bool expected)
     {
         // Arrange & Act
