@@ -54,7 +54,6 @@ Console.WriteLine(id.IsAdult);             // true
 - Birth date, age, gender
 - Governorate (27 governorates)
 - Geographic region classification
-- Issue date & expiry estimation
 - Serial number
 
 ### 🌍 Arabic Support
@@ -126,14 +125,6 @@ id.Gender                 // Male (enum)
 id.GenderAr               // ذكر
 id.SerialNumber           // 2345
 
-// 🎫 Card Info
-id.EstimatedIssueDate     // 2017-01-01 (birth + 16 years)
-id.YearsSinceIssue        // 9 years
-id.EstimatedExpiryDate    // 2024-01-01
-id.IsLikelyExpired        // true
-id.YearsUntilExpiry       // -2 (expired 2 years ago)
-id.IsExpiringSoon         // false
-
 // 📄 Raw
 id.Value                  // "30101010123458"
 ```
@@ -177,41 +168,6 @@ id.IsBornAbroad           // false (Governorate.Foreign)
 5. **Sinai & Red Sea** (سيناء والبحر الأحمر)
 6. **Western Desert** (الصحراء الغربية) - Matrouh, New Valley
 7. **Foreign** (خارج الجمهورية)
-
----
-
-### Issue Date & Expiry
-
-Egyptian IDs are issued at age 16 with 7-year validity (5 years before 2021).
-
-```csharp
-var id = new EgyptianNationalId("30101010123458");
-
-// Issue estimation
-id.EstimatedIssueDate      // 2017-01-01 (birth + 16 years)
-id.YearsSinceIssue         // 9 years
-id.CardAge                 // 9 years
-
-// Expiry estimation
-id.EstimatedExpiryDate     // 2024-01-01 (issue + 7 years)
-id.IsLikelyExpired         // true
-id.YearsUntilExpiry        // -2 (expired)
-id.IsExpiringSoon          // false (already expired)
-
-// Eligibility
-id.IsEligibleForNationalId // true (age >= 16)
-```
-
-**Use Cases:**
-```csharp
-// Renewal reminders
-if (user.NationalId.IsExpiringSoon)
-    SendRenewalReminder();
-
-// Expired verification
-if (user.NationalId.IsLikelyExpired)
-    ShowExpiryWarning();
-```
 
 ---
 
@@ -374,7 +330,6 @@ dotnet test
 - National ID validation & parsing
 - Checksum validation (optional)
 - Geographic region classification
-- Issue date & expiry estimation
 - Arabic language support
 - Formatting options
 - Equality & comparison
@@ -404,4 +359,4 @@ MIT License - Made with ❤️ for Egyptian developers
 ## 🔗 Links
 
 - 📦 [NuGet Package](https://www.nuget.org/packages/Egypt.Net.Core/)
-- 💻 [GitHub Repository](https://github.com/abdulrhmanhossam/Egypt-Net-Core)
+- 💻 [GitHub Repository](https://github.com/abdulrahmanhossam/Egypt-Net-Core)

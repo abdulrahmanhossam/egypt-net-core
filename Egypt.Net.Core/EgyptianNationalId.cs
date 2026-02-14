@@ -20,9 +20,7 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
     private const int SerialLength = 4;
     // 13th digit (0-based index 12) determines gender
     private const int GenderDigitIndex = 12;
-    private const int FirstIssueAge = 16;
-    private const int ValidityPeriodYears = 7;
-    private const int ValidityPeriodChangeYear = 2021;
+
     // Checksum weights for validation (first 13 digits)
     private static readonly int[] ChecksumWeights = { 2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2 };
 
@@ -98,68 +96,6 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
     public string GenderAr => Gender == Gender.Male ? "ذكر" : "أنثى";
 
     /// <summary>
-    /// Gets the estimated date when the National ID was first issued.
-    /// Egyptian National IDs are typically issued when a person turns 16.
-    /// This is an estimation based on the birth date.
-    /// </summary>
-    /// <remarks>
-    /// The actual issue date may vary slightly depending on when the person
-    /// applied for their ID after turning 16.
-    /// </remarks>
-    public DateTime EstimatedIssueDate => CalculateEstimatedIssueDate();
-
-    /// <summary>
-    /// Gets the number of years since the estimated issue date.
-    /// This represents approximately how long ago the ID was first issued.
-    /// </summary>
-    public int YearsSinceIssue => CalculateYearsSinceIssue();
-
-    /// <summary>
-    /// Gets the age of the National ID card in years.
-    /// This is the time elapsed since the estimated issue date.
-    /// </summary>
-    public int CardAge => YearsSinceIssue;
-
-    /// <summary>
-    /// Gets the estimated expiry date of the National ID.
-    /// Current regulation: IDs are valid for 7 years from issue date.
-    /// Note: IDs issued before 2021 had a 5-year validity period.
-    /// </summary>
-    /// <remarks>
-    /// This is an estimation. The actual expiry date may differ if:
-    /// - The ID was issued before the person turned 16
-    /// - The ID was renewed at a different time
-    /// - Validity period regulations changed
-    /// </remarks>
-    public DateTime EstimatedExpiryDate => CalculateEstimatedExpiryDate();
-
-    /// <summary>
-    /// Indicates whether the National ID is likely expired based on
-    /// the estimated issue date and current validity period (7 years).
-    /// </summary>
-    /// <remarks>
-    /// This is an estimation. A person may have renewed their ID before expiry.
-    /// Always verify with official sources for critical applications.
-    /// </remarks>
-    public bool IsLikelyExpired => DateTime.Today > EstimatedExpiryDate;
-
-    /// <summary>
-    /// Gets the number of years until the estimated expiry date.
-    /// Returns a negative number if the ID is already expired.
-    /// </summary>
-    public int YearsUntilExpiry => CalculateYearsUntilExpiry();
-
-    /// <summary>
-    /// Indicates whether the ID is estimated to expire within the next year.
-    /// Useful for sending renewal reminders.
-    /// </summary>
-    public bool IsExpiringSoon => YearsUntilExpiry >= 0 && YearsUntilExpiry <= 1;
-
-    /// <summary>
-    /// Indicates whether the person is old enough to have received
-    /// their first National ID (age 16 or older).
-    /// </summary>
-    public bool IsEligibleForNationalId => Age >= FirstIssueAge;
     /// Gets the geographic region where the person was born.
     /// </summary>
     public Region BirthRegion => Governorate.GetRegion();
@@ -558,81 +494,5 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
                     "Unsupported century digit in National ID."
                 )
         };
-    }
-
-    /// <summary>
-    /// Calculates the estimated issue date of the National ID.
-    /// IDs are typically issued when a person turns 16 years old.
-    /// </summary>
-    private DateTime CalculateEstimatedIssueDate()
-    {
-        return BirthDate.AddYears(FirstIssueAge);
-    }
-
-    /// <summary>
-    /// Calculates the number of years since the estimated issue date.
-    /// </summary>
-    private int CalculateYearsSinceIssue()
-    {
-        var issueDate = EstimatedIssueDate;
-        var today = DateTime.Today;
-
-        int years = today.Year - issueDate.Year;
-
-        if (issueDate.Date > today.AddYears(-years))
-            years--;
-
-        if (years < 0)
-            return 0;
-
-        return years;
-    }
-
-    /// <summary>
-    /// Calculates the estimated expiry date of the National ID.
-    /// Current regulation: 7 years validity.
-    /// Old regulation (before 2021): 5 years validity.
-    /// </summary>
-    private DateTime CalculateEstimatedExpiryDate()
-    {
-        var issueDate = EstimatedIssueDate;
-
-        int validityPeriod;
-
-        if (issueDate.Year < ValidityPeriodChangeYear)
-        {
-            validityPeriod = 5;
-        }
-        else
-        {
-            validityPeriod = ValidityPeriodYears;
-        }
-
-        return issueDate.AddYears(validityPeriod);
-    }
-
-    /// <summary>
-    /// Calculates the number of years until the estimated expiry date.
-    /// Returns negative if already expired.
-    /// </summary>
-    private int CalculateYearsUntilExpiry()
-    {
-        var expiryDate = EstimatedExpiryDate;
-        var today = DateTime.Today;
-
-        if (today > expiryDate)
-        {
-            int yearsSinceExpiry = today.Year - expiryDate.Year;
-            if (expiryDate.Date > today.AddYears(-yearsSinceExpiry))
-                yearsSinceExpiry--;
-
-            return -yearsSinceExpiry;
-        }
-
-        int yearsUntil = expiryDate.Year - today.Year;
-        if (today.Date > expiryDate.AddYears(-yearsUntil))
-            yearsUntil--;
-
-        return yearsUntil;
     }
 }
