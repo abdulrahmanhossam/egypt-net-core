@@ -1,3 +1,4 @@
+using Egypt.Net.Core.Enums;
 using Egypt.Net.Core.Exceptions;
 using System;
 
@@ -146,6 +147,30 @@ public sealed class EgyptianNationalId : IEquatable<EgyptianNationalId>, ICompar
     /// </summary>
     public bool IsBornAbroad => BirthRegion == Region.Foreign;
 
+
+    /// <summary>
+    /// Gets the generation (generational cohort) based on birth year.
+    /// Uses Western generational definitions: Silent Generation, Baby Boomers, 
+    /// Generation X, Millennials, Generation Z, and Generation Alpha.
+    /// </summary>
+    public Generation Generation => GenerationExtensions.GetGenerationFromYear(BirthYear);
+
+    /// <summary>
+    /// Gets the generation name in Arabic.
+    /// </summary>
+    public string GenerationAr => Generation.GetArabicName();
+
+    /// <summary>
+    /// Gets the generation name in English.
+    /// </summary>
+    public string GenerationEn => Generation.GetEnglishName();
+
+    /// <summary>
+    /// Indicates whether the person is a digital native.
+    /// Digital natives are Millennials (1981-1996), Gen Z (1997-2012), 
+    /// and Gen Alpha (2013+).
+    /// </summary>
+    public bool IsDigitalNative => Generation.IsDigitalNative();
     /// <summary>
     /// Initializes a new instance of <see cref="EgyptianNationalId"/>.
     /// </summary>
