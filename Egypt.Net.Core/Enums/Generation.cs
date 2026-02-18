@@ -11,7 +11,7 @@ public enum Generation
     /// Born during the Great Depression and World War II.
     /// Known for traditional values and strong work ethic.
     /// </summary>
-    SilentGeneratoin = 1,
+    SilentGeneration = 1,
 
     /// <summary>
     /// Baby Boomers (1946-1964) - جيل الطفرة
@@ -25,7 +25,7 @@ public enum Generation
     /// Bridge between analog and digital worlds.
     /// Independent and adaptable.
     /// </summary>
-    GeneratoinX = 3,
+    GenerationX = 3,
 
     /// <summary>
     /// Millennials (1981-1996) - جيل الألفية
