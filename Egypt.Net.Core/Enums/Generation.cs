@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace Egypt.Net.Core.Enums;
 
 /// <summary>
@@ -11,6 +13,7 @@ public enum Generation
     /// Born during the Great Depression and World War II.
     /// Known for traditional values and strong work ethic.
     /// </summary>
+    [Description("الجيل الصامت")]
     SilentGeneration = 1,
 
     /// <summary>
@@ -18,6 +21,7 @@ public enum Generation
     /// Post-WWII birth surge generation.
     /// Witnessed economic growth and social change.
     /// </summary>
+    [Description("جيل الطفرة")]
     BabyBoomers = 2,
 
     /// <summary>
@@ -25,6 +29,7 @@ public enum Generation
     /// Bridge between analog and digital worlds.
     /// Independent and adaptable.
     /// </summary>
+    [Description("الجيل إكس")]
     GenerationX = 3,
 
     /// <summary>
@@ -32,6 +37,7 @@ public enum Generation
     /// First digital natives, came of age with internet.
     /// Tech-savvy and socially conscious.
     /// </summary>
+    [Description("جيل الألفية")]
     Millennials = 4,
 
     /// <summary>
@@ -39,6 +45,7 @@ public enum Generation
     /// True digital natives, grew up with smartphones.
     /// Diverse, entrepreneurial, and socially aware.
     /// </summary>
+    [Description("جيل زد")]
     GenerationZ = 5,
 
     /// <summary>
@@ -46,5 +53,6 @@ public enum Generation
     /// Born entirely in the 21st century.
     /// Growing up with AI, tablets, and social media.
     /// </summary>
+    [Description("جيل ألفا")]
     GenerationAlpha = 6
 }
